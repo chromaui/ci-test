@@ -11,13 +11,12 @@ jobs:
       - uses: actions/checkout@v2
       - uses: c-hive/gha-yarn-cache@v1
       - name: install
-        run: |
-          yarn install
+        run: yarn install
       - name: upload root
         uses: actions/upload-artifact@v2
         with:
-          name: root
-          path:  ${{ github.workspace }}/**
+          name: installed
+          path: ${{ github.workspace }}/**
 
   # trying to build every package in parallel
   build:
@@ -26,16 +25,19 @@ jobs:
     needs: [install]
     strategy:
       matrix:
-        package: [packages/a, packages/b]
+        # the '/' char isn't allowed :(
+        package: [packages.a, packages.b]
     steps:
       - name: download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: root
+          name: installed
           path: ${{ github.workspace }}
+      - name: Get yarn cache directory path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: build
         run: |
-          echo ${{ matrix.package }}
+          echo $(${{ matrix.package }}//[.]/1)
           ls ${{ github.workspace }}
       - name: upload package
         uses: actions/upload-artifact@v2
