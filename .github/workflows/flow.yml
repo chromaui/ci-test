@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: download artifacts
         uses: actions/download-artifact@v2
+        with:
+          name: root
+          path: ${{ github.workspace }}
       - name: build
         run: |
           echo ${{ matrix.package }}
