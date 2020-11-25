@@ -27,8 +27,8 @@ jobs:
       - name: upload package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.package }}
-          path: ${{ matrix.package }}/**
+          name: ${{ github.workspace }}/${{ matrix.package }}
+          path: ${{ github.workspace }}/${{ matrix.package }}/**
 
   examples:
     name: Build examples matrix
