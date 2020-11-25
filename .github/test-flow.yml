@@ -24,7 +24,7 @@ jobs:
         echo "bootstrap"
 
   examples:
-    name: Build examples
+    name: Build examples matrix
     needs: [build]
     strategy:
       matrix:
