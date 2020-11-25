@@ -37,7 +37,7 @@ jobs:
           name: installed
           path: ${{ github.workspace }}
       - name: build
-        run: echo PACKAGE_ID # replace . with /
+        run: echo $PACKAGE_ID
         env:
           PACKAGE_ID: ${{ join(matrix.package, '/') }}
       - name: upload package
