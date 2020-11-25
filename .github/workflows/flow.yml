@@ -26,7 +26,10 @@ jobs:
     strategy:
       matrix:
         # the '/' char isn't allowed :(
-        package: [packages.a, packages.b]
+        package: [
+          [packages, a],
+          [packages, b]
+        ]
     steps:
       - name: download artifacts
         uses: actions/download-artifact@v2
@@ -34,14 +37,14 @@ jobs:
           name: installed
           path: ${{ github.workspace }}
       - name: build
-        run: echo ${PACKAGE_ID//[.]/X}
+        run: echo PACKAGE_ID # replace . with /
         env:
-          PACKAGE_ID: ${{ matrix.package }}
+          PACKAGE_ID: ${{ join(matrix.package, '/') }}
       - name: upload package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.package }}
-          path: ${{ github.workspace }}/${{ matrix.package }}/**
+          name: ${{ join(matrix.package, '.') }}
+          path: ${{ github.workspace }}/${{ join(matrix.package, '/') }}/**
 
   # run every example in parallel
   examples:
