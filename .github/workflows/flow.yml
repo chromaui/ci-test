@@ -34,7 +34,7 @@ jobs:
           name: installed
           path: ${{ github.workspace }}
       - name: build
-        run: echo $(PACKAGE_ID//[.]/1)
+        run: echo ${PACKAGE_ID//[.]/X}
         env:
           PACKAGE_ID: ${{ matrix.package }}
       - name: upload package
