@@ -3,6 +3,7 @@ name: Test flow
 on: [push]
 
 jobs:
+  # install all node_modules
   install:
     name: Bootstrap core
     runs-on: ubuntu-latest
@@ -13,6 +14,7 @@ jobs:
         run: |
           yarn install
 
+  # trying to build every package in parallel
   build:
     name: Build examples matrix
     runs-on: ubuntu-latest
@@ -24,12 +26,14 @@ jobs:
       - name: build
         run: |
           echo ${{ matrix.package }}
+          ls ${{ github.workspace }}
       - name: upload package
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.workspace }}/${{ matrix.package }}
+          name: ${{ matrix.package }}
           path: ${{ github.workspace }}/${{ matrix.package }}/**
 
+  # run every example in parallel
   examples:
     name: Build examples matrix
     runs-on: ubuntu-latest
