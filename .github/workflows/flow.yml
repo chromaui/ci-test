@@ -3,25 +3,32 @@ name: Test flow
 on: [push]
 
 jobs:
-  build:
+  install:
     name: Bootstrap core
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "10.x"
       - uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: build-v2-${{ hashFiles('README.md') }}
-          restore-keys: |
-            build-v2-${{ env.cache-name }}-
-            build-v2-
-      - name: install, bootstrap
+      - uses: c-hive/gha-yarn-cache@v1
+      - name: install
         run: |
-          echo "bootstrap"
+          yarn install
+
+  build:
+    name: Build examples matrix
+    runs-on: ubuntu-latest
+    needs: [install]
+    strategy:
+      matrix:
+        package: [packages/a, packages/b]
+    steps:
+      - name: build
+        run: |
+          echo ${{ matrix.package }}
+      - name: upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.package }}
+          path: ${{ matrix.package }}/**
 
   examples:
     name: Build examples matrix
