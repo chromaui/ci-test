@@ -13,6 +13,11 @@ jobs:
       - name: install
         run: |
           yarn install
+      - name: upload root
+        uses: actions/upload-artifact@v2
+        with:
+          name: root
+          path:  ${{ github.workspace }}/**
 
   # trying to build every package in parallel
   build:
@@ -23,6 +28,8 @@ jobs:
       matrix:
         package: [packages/a, packages/b]
     steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v2
       - name: build
         run: |
           echo ${{ matrix.package }}
@@ -42,6 +49,11 @@ jobs:
       matrix:
         example: [official-storybook, cra-kitchen-sink]
     steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v2
       - name: test
+        run: |
+          echo ${{ matrix.example }}
+      - name: chromatic
         run: |
           echo ${{ matrix.example }}
