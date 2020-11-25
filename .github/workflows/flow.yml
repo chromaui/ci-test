@@ -29,8 +29,8 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        mongodb-version: [4.0, 4.2]
+        example: [official-storybook, cra-kitchen-sink]
     steps:
       - name: test
         run: |
-          echo ${{ matrix.mongodb-version }}
+          echo ${{ matrix.example }}
